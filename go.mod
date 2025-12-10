@@ -1,4 +1,4 @@
-module adk_litellm
+module github.com/characat0/adk_litellm
 
 go 1.25
 
