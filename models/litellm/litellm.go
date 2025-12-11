@@ -216,6 +216,8 @@ func (m *LiteLLMModel) GenerateContent(ctx context.Context, req *model.LLMReques
 			FinishReason: convertFinishReason(string(res.Choice().FinishReason)),
 			TurnComplete: true,
 		}
-		yield(out, nil)
+		if !yield(out, nil) {
+			return
+		}
 	}
 }
