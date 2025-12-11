@@ -5,6 +5,7 @@ go 1.25
 require (
 	google.golang.org/adk v0.2.0
 	google.golang.org/genai v1.38.0
+	github.com/andrejsstepanovs/go-litellm v1.2.7
 )
 
 require (
