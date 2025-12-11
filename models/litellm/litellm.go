@@ -268,15 +268,22 @@ func (m *liteLLMModel) maybeAppendUserContent(req *model.LLMRequest) {
 	}
 }
 
+type liteLLMResponseFormat struct {
+	Type       string                 `json:"type"`
+	JSONSchema map[string]interface{} `json:"json_schema"`
+	Strict     bool                   `json:"strict"`
+}
+
 // LiteLLM request/response structures
 type liteLLMRequest struct {
-	Model       string           `json:"model"`
-	Messages    []liteLLMMessage `json:"messages"`
-	Temperature *float64         `json:"temperature,omitempty"`
-	MaxTokens   *int             `json:"max_tokens,omitempty"`
-	Stream      bool             `json:"stream,omitempty"`
-	Tools       []liteLLMTool    `json:"tools,omitempty"`
-	ToolChoice  interface{}      `json:"tool_choice,omitempty"`
+	Model          string                `json:"model"`
+	Messages       []liteLLMMessage      `json:"messages"`
+	Temperature    *float64              `json:"temperature,omitempty"`
+	MaxTokens      *int                  `json:"max_tokens,omitempty"`
+	Stream         bool                  `json:"stream,omitempty"`
+	Tools          []liteLLMTool         `json:"tools,omitempty"`
+	ToolChoice     interface{}           `json:"tool_choice,omitempty"`
+	ResponseFormat liteLLMResponseFormat `json:"response_format,omitempty"`
 }
 
 type liteLLMMessage struct {
