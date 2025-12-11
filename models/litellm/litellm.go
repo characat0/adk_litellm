@@ -199,6 +199,7 @@ func (m *LiteLLMModel) GenerateContent(ctx context.Context, req *model.LLMReques
 		res, err := m.Litellm.Completion(ctx, litellmRequest)
 		if err != nil {
 			yield(nil, err)
+			return
 		}
 		msg := res.Message()
 
