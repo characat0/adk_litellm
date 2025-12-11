@@ -96,6 +96,25 @@ func schemaToFunctionParameters(schema *jsonschema.Schema) *request.LLMCallToolF
 	}
 }
 
+func toJSONSchema(s *genai.Schema) map[string]interface{} {
+	m := map[string]interface{}{}
+	if s.Type != "" {
+		m["type"] = s.Type
+	}
+	if s.Properties != nil {
+		props := map[string]interface{}{}
+		for k, v := range s.Properties {
+			props[k] = toJSONSchema(v)
+		}
+		m["properties"] = props
+		if len(s.Required) > 0 {
+			m["required"] = s.Required
+		}
+		m["additionalProperties"] = false
+	}
+	return m
+}
+
 func toLiteLLMCompletionRequest(m models.ModelMeta, req *model.LLMRequest, stream bool, defaultTemperature float32) *request.Request {
 	var messages []request.Message
 
@@ -132,7 +151,15 @@ func toLiteLLMCompletionRequest(m models.ModelMeta, req *model.LLMRequest, strea
 		}
 	}
 	liteReq := request.NewCompletionRequest(m, messages, tools, req.Config.Temperature, defaultTemperature)
-	liteReq.Stream = stream
+
+	if req.Config.ResponseSchema != nil {
+		liteReq.SetJSONSchema(request.JSONSchema{
+			Name:   req.Config.ResponseSchema.Title,
+			Schema: toJSONSchema(req.Config.ResponseSchema),
+			Strict: true,
+		})
+	}
+
 	return liteReq
 }
 
