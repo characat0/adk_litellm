@@ -159,6 +159,7 @@ func toLiteLLMCompletionRequest(m models.ModelMeta, req *model.LLMRequest, strea
 			Strict: true,
 		})
 	}
+	liteReq.Stream = stream
 
 	return liteReq
 }
