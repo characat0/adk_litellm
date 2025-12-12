@@ -194,8 +194,9 @@ func (m *LiteLLMModel) GenerateContent(ctx context.Context, req *model.LLMReques
 		}
 		msg := res.Message()
 
-		parts := []*genai.Part{
-			genai.NewPartFromText(msg.Content),
+		var parts []*genai.Part
+		if msg.Content != "" {
+			parts = append(parts, genai.NewPartFromText(msg.Content))
 		}
 
 		parts = append(parts, NewPartsFromToolCalls(msg.ToolCalls)...)
