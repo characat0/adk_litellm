@@ -2,6 +2,7 @@ package litellm
 
 import (
 	"context"
+	"encoding/json"
 	"iter"
 	"net/url"
 	"strings"
@@ -97,22 +98,10 @@ func schemaToFunctionParameters(schema *jsonschema.Schema) *request.LLMCallToolF
 }
 
 func toJSONSchema(s *genai.Schema) map[string]interface{} {
-	m := map[string]interface{}{}
-	if s.Type != "" {
-		m["type"] = s.Type
-	}
-	if s.Properties != nil {
-		props := map[string]interface{}{}
-		for k, v := range s.Properties {
-			props[k] = toJSONSchema(v)
-		}
-		m["properties"] = props
-		if len(s.Required) > 0 {
-			m["required"] = s.Required
-		}
-		m["additionalProperties"] = false
-	}
-	return m
+	str, _ := json.Marshal(s)
+	var schema map[string]interface{}
+	_ = json.Unmarshal(str, &schema)
+	return schema
 }
 
 func toLiteLLMCompletionRequest(m models.ModelMeta, req *model.LLMRequest, stream bool, defaultTemperature float32) *request.Request {
