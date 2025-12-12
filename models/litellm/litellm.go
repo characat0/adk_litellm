@@ -84,7 +84,7 @@ func schemaToLLMCallToolFunctionProperty(schema *jsonschema.Schema) request.LLMC
 }
 
 func schemaToFunctionParameters(schema *jsonschema.Schema) *request.LLMCallToolFunctionParameters {
-	var properties map[string]request.LLMCallToolFunctionProperty
+	properties := make(map[string]request.LLMCallToolFunctionProperty)
 	for name, prop := range schema.Properties {
 		properties[name] = schemaToLLMCallToolFunctionProperty(prop)
 	}
