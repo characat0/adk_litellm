@@ -101,6 +101,7 @@ func toJSONSchema(s *genai.Schema) map[string]interface{} {
 	str, _ := json.Marshal(s)
 	var schema map[string]interface{}
 	_ = json.Unmarshal(str, &schema)
+	schema["additionalProperties"] = false
 	return schema
 }
 
